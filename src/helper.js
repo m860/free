@@ -11,7 +11,7 @@ export function downloadFileFromUrl(fileName,url){
 				resolve(file);
 			});
 		}).on("error",err=>{
-			reject(err);
+			console.error(err);
 		});
 		if(security){
 			https.get(url,res=>{
@@ -24,4 +24,14 @@ export function downloadFileFromUrl(fileName,url){
 			})
 		}
 	});
+}
+
+export function unicodeToUTF8(str){
+	return str.replace(/&#(\d+);/g,(original,group)=>{
+		return String.fromCharCode(group);
+	})
+}
+
+export function rmSpace(str){
+	return str.replace(/ /g,"");
 }

@@ -1,5 +1,9 @@
 import {getStockListFromSH} from "./stock";
 
+process.on("uncaughtException",err=>{
+	console.error(err);
+});
+
 getStockListFromSH();
 
 // import fs from "fs";
