@@ -13,11 +13,11 @@ export function downloadFileFromUrl(fileName,url){
 				resolve(file);
 			});
 		}).on("error",err=>{
-			file.close(()=>{
-				fs.unlinkSync(fileName);
-			});
 			console.error(err);
 			reject(err);
+		}).on("close",()=>{
+			console.log(`file${fileName} is closed`);
+			fs.unlink(fileName);
 		});
 		console.log(`begin download ${url}`);
 		let done=res=>{
