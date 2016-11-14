@@ -1,10 +1,14 @@
-import {getStockListFromSH} from "./stock";
+import {
+	getStockListFromSH,
+	getStockHistoryFromYahoo
+} from "./stock";
 
-process.on("uncaughtException",err=>{
+process.on("uncaughtException", err=> {
 	console.error(err);
 });
 
-getStockListFromSH();
+// getStockListFromSH();
+getStockHistoryFromYahoo("002673.ss");
 
 // import fs from "fs";
 // import http from "http";
