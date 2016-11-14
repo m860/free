@@ -37,6 +37,7 @@ export async function getStockHistoryFromYahoo(stockCode, startDate, endDate = n
 	if(!fs.existsSync(fileName)){
 		await downloadFileFromUrl(fileName,url);
 	}
+	/*
 	try {
 		let datas = await readCSV(fileName);
 		console.log(datas[0]);
@@ -45,4 +46,5 @@ export async function getStockHistoryFromYahoo(stockCode, startDate, endDate = n
 	catch(ex){
 		console.log(ex);
 	}
+	*/
 }
