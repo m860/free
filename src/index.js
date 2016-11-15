@@ -1,19 +1,25 @@
 import {
-	getStockListFromSH,
-	getStockHistoryFromYahoo
+	downloadStockListFromYahoo,
+	getStocks
 } from "./stock";
 
-process.on("uncaughtException", err=> {
-	console.error(err);
-});
+async function run() {
+	let list = await getStocks();
+	if (list) {
+		console.log(`stock total is ${list.length}`);
+		let download = async()=> {
+			if (list.length > 0) {
+				let stock = list.shift();
+				console.log(`stock code : ${stock[0]}`)
+				await downloadStockListFromYahoo(stock[0]);
+				download();
+			}
+		};
+		download();
+	}
+	else{
+		console.log(`stock list is empty`);
+	}
+}
 
-// getStockListFromSH();
-getStockHistoryFromYahoo("002673.ss");
-
-// import fs from "fs";
-// import http from "http";
-//
-// http.get("http://a.hiphotos.baidu.com/zhidao/pic/item/f9dcd100baa1cd11aa2ca018bf12c8fcc3ce2d74.jpg",res=>{
-// 	let file=fs.createWriteStream("a.png");
-// 	res.pipe(file);
-// })
+run();

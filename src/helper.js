@@ -73,17 +73,39 @@ export function downloadFileFromUrl(fileName, url, retry = 3) {
 	})
 }
 
-export function unicodeToUTF8(str) {
+export function unicodeToUTF8Sync(str) {
 	return str.replace(/&#(\d+);/g, (original, group)=> {
 		return String.fromCharCode(group);
 	})
 }
 
-export function rmSpace(str) {
+function isShangHaiSync(stockCode){
+	return /^600/.test(stockCode)
+		|| /^601/.test(stockCode)
+		|| /^900/.test(stockCode)
+		|| /^730/.test(stockCode)
+		|| /^700/.test(stockCode)
+		|| /^603/.test(stockCode);
+}
+
+export function getBourseCodeSync(stockCode, sourceApi="yahoo"){
+	switch (sourceApi){
+		case "yahoo":
+			if(isShangHaiSync(stockCode)){
+				return "ss";
+			}
+			return "sz";
+			break;
+		default:
+			return "ss";
+	}
+}
+
+export function rmSpaceSync(str) {
 	return str.replace(/ /g, "");
 }
 
-export function readXlsx(fileName) {
+export function readXlsxSync(fileName) {
 	return xlsx.parse(fs.readFileSync(fileName));
 }
 
@@ -91,12 +113,13 @@ export function readCSV(fileName) {
 	return new Promise((resolve, reject)=> {
 		csv.parse(fs.readFileSync(fileName), (err, data)=> {
 			if (err) {
-				console.error(err);
 				reject(err);
 			}
 			else {
 				resolve(data);
 			}
 		});
+	}).catch(ex=>{
+		console.error(ex);
 	})
 }
