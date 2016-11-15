@@ -32,7 +32,13 @@ export async function getStockHistoryFromYahoo(stockCode, startDate, endDate = n
 	//http://blog.sina.com.cn/s/blog_7ed3ed3d010146ti.html
 	//http://table.finance.yahoo.com/table.csv?s=600000.ss
 	//http://table.finance.yahoo.com/table.csv?s=002673.ss
-	let url = `http://table.finance.yahoo.com/table.csv?s=${stockCode}`;
+	let url;
+	if(startDate){
+		url = `http://table.finance.yahoo.com/table.csv?s=${stockCode}&a=${startDate.getMonth()}&b=${startDate.getDate()}&c=${startDate.getFullYear()}&d=${endDate.getMonth()}&e=${endDate.getDate()}&f=${endDate.getFullYear()}`;
+	}
+	else{
+		url = `http://table.finance.yahoo.com/table.csv?s=${stockCode}`;
+	}
 	let fileName=path.join(basePath,`${stockCode}.csv`);
 	if(!fs.existsSync(fileName)){
 		await downloadFileFromUrl(fileName,url);
