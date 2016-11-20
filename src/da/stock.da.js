@@ -15,35 +15,24 @@ let connection=mysql.createConnection({
 export async function existsStockByCode(code){
 	let count=await exec(connection, `select count(1) as Total from tbl_StockList where CompanyCode=${code}`).then((rows,fields)=>{
 		return rows[0].Total;
-	}).catch(ex=>{
-		throw ex;
 	});
 	return count>0;
 }
 
 export function insertStock(stock){
 	let sql=generateInsertSqlText("tbl_StockList",stock);
-	return exec(connection,sql).catch(ex=>{
-		console.error(sql);
-		throw ex;
-	});
+	return exec(connection,sql);
 }
 
 export function updateStock(stock){
 	let sql=generateUpdateSqlText("tbl_StockList",stock,data=>{
 		return `CompanyCode='${data.CompanyCode}'`;
 	});
-	return exec(connection,sql).catch(ex=>{
-		console.error(sql);
-		throw ex;
-	});
+	return exec(connection,sql);
 }
 
 export function getStocks() {
-	return exec(connection,`select * from tbl_StockList`).catch(ex=>{
-		console.error("getStocks",ex);
-		throw ex;
-	});
+	return exec(connection,`select * from tbl_StockList`);
 }
 
 export function getLastPriceByCode(companyCode){
@@ -53,17 +42,11 @@ export function getLastPriceByCode(companyCode){
 			return rows[0];
 		}
 		return null;
-	}).catch(ex=>{
-		console.error(ex,sql);
-		throw ex;
 	});
 }
 
 export function insertStockPrices(prices){
 	let sql=generateInsertSqlText("tbl_StockPrices",prices);
-	return exec(connection,sql).catch(ex=>{
-		console.error(ex);
-		throw ex;
-	});
+	return exec(connection,sql);
 }
 

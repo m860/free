@@ -57,7 +57,9 @@ export async function getStockPricesFromYahoo(stockCode, startDate, endDate = ne
 		await downloadFileFromUrl(fileName, url);
 	}
 	let datas = await readCSV(fileName);
-	datas.shift();
+	if(datas && datas.shift) {
+		datas.shift();
+	}
 	return datas;
 }
 

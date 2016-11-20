@@ -10,6 +10,7 @@ import {
 	toMysqlDateSync,
 	toMysqlDateTimeSync
 } from "../../utility/helper";
+import {error} from "../../utility/logHelper";
 
 export default async function updateStockList() {
 	let data = await getStocks();
@@ -44,30 +45,24 @@ export default async function updateStockList() {
 				if (exists) {
 					//update
 					stock.UpdateDate = toMysqlDateTimeSync(new Date());
-					try {
-						await updateStock(stock);
-						console.log(`${stock.CompanyCode} update success`);
-						saveStock();
-					}
-					catch(ex){
-						console.log(ex);
-					}
+					await updateStock(stock);
+					console.log(`${stock.CompanyCode} update success`);
 				}
 				else {
 					//insert
-					try {
-						await insertStock(stock);
-						console.log(`${stock.CompanyCode} insert success`);
-						saveStock();
-					}
-					catch (ex) {
-						console.log(ex);
-						console.log(stock);
-					}
-				}
+					await insertStock(stock);
+					console.log(`${stock.CompanyCode} insert success`);
 
+				}
+				saveStock();
 			}
 		}
-		saveStock();
+		try {
+			saveStock();
+		}
+		catch(ex){
+			error(ex);
+			saveStock();
+		}
 	}
 }
