@@ -173,3 +173,15 @@ export function toMysqlDateTimeSync(value) {
 		return null;
 	}
 }
+
+export function addDay(date,day=0){
+	let ms;
+	if(typeof date === "string"){
+		ms=Date.parse(date);
+	}
+	else{
+		ms=date.valueOf();
+	}
+	ms+=(day*24*60*60*1000);
+	return new Date(ms);
+}

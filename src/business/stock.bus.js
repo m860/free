@@ -46,11 +46,18 @@ export async function getStockPricesFromYahoo(stockCode, startDate, endDate = ne
 	else {
 		url = `http://table.finance.yahoo.com/table.csv?s=${code}`;
 	}
-	let fileName = path.join(basePath, `${code}.csv`);
+	let fileName ;
+	if(startDate){
+		fileName = path.join(basePath, `${code}-${df(startDate,"yyyy-mm-dd")}.csv`);
+	}
+	else{
+		fileName = path.join(basePath, `${code}.csv`);
+	}
 	if (!fs.existsSync(fileName)) {
 		await downloadFileFromUrl(fileName, url);
 	}
 	let datas = await readCSV(fileName);
+	datas.shift();
 	return datas;
 }
 
