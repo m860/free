@@ -10,7 +10,7 @@ import path from "path";
 import fs from "fs";
 import df from "dateformat";
 
-const basePath = path.join(__dirname, `../build/${df(new Date(), "yyyymmdd")}`);
+const basePath = path.join(__dirname, `../../build/${df(new Date(), "yyyymmdd")}`);
 
 if (!fs.existsSync(basePath)) {
 	fs.mkdirSync(basePath);
