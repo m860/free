@@ -12,29 +12,27 @@ let connection=mysql.createConnection({
 	database:"stock"
 });
 
-connection.connect();
-//
-// exec(connection,"select * from tbl_StockList").then((rows,fields)=>{
-// 	console.log(rows);
-// 	console.log(fields);
-// }).catch(err=>{
-// 	console.log(err);
-// })
+export function connect(){
+	connection.connect();
+}
+
+export function end(){
+	connection.end();
+}
 
 export async function existsStockByCode(code){
 	let count=await exec(connection, `select count(1) as Total from tbl_StockList where CompanyCode=${code}`).then((rows,fields)=>{
 		return rows[0].Total;
+	}).catch(ex=>{
+		console.error(ex);
 	});
-	console.log(count);
 	return count>0;
 }
 
 export function insertStock(stock){
 	let sql=generateInsertSqlText("tbl_StockList",stock);
-	return exec(connection,sql).then((...args)=>{
-		console.log(args);
-	}).catch(ex=>{
-		console.log(ex)
+	return exec(connection,sql).catch(ex=>{
+		console.error(ex)
 	});
 }
 
@@ -42,7 +40,8 @@ export function updateStock(stock){
 	let sql=generateUpdateSqlText("tbl_StockList",stock,data=>{
 		return `CompanyCode='${data.CompanyCode}'`;
 	});
-	console.log(sql);
-	return exec(connection,sql);
+	return exec(connection,sql).catch(ex=>{
+		console.error(ex);
+	});
 }
 

@@ -2,7 +2,9 @@ import {getStocks} from "../business/stock.bus";
 import {
 	existsStockByCode,
 	insertStock,
-	updateStock
+	updateStock,
+	connect,
+end
 } from "../da/stock.da";
 import {
 	unicodeToUTF8Sync,
@@ -56,7 +58,7 @@ async function updateStockList() {
 				catch(ex){
 					console.log(ex);
 				}
-				//saveStock();
+				saveStock();
 			}
 		}
 		try {
@@ -68,4 +70,8 @@ async function updateStockList() {
 	}
 }
 
+connect();
+
 updateStockList();
+
+end();
