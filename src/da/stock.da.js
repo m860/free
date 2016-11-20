@@ -47,3 +47,7 @@ export function updateStock(stock){
 	});
 }
 
+export function getStocks() {
+	return exec(connection,`select * from tbl_StockList`);
+}
+
