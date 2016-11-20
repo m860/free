@@ -36,7 +36,7 @@ export function generateInsertSqlText(tableName,data){
 	let generateValues=(value)=>{
 		let arr=[];
 		for(let field in value){
-			arr.push(value[field]);
+			arr.push(buildMysqlValue(value[field]));
 		}
 		values.push(`(${arr.join(',')})`);
 	}
