@@ -5,7 +5,7 @@ import {
 	readXlsxSync,
 	getBourseCodeSync,
 	readCSV
-} from "./helper";
+} from "../utility/helper";
 import path from "path";
 import fs from "fs";
 import df from "dateformat";
@@ -56,4 +56,23 @@ export async function downloadStockListFromYahoo(stockCode, startDate, endDate =
 	// 	return datas;
 	// }
 	// return null;
+}
+
+export async function downloadAll() {
+	let list = await getStocks();
+	if (list) {
+		console.log(`stock total is ${list.length}`);
+		let download = async()=> {
+			if (list.length > 0) {
+				let stock = list.shift();
+				console.log(`stock code : ${stock[0]}`)
+				await downloadStockListFromYahoo(stock[0]);
+				download();
+			}
+		};
+		download();
+	}
+	else{
+		console.log(`stock list is empty`);
+	}
 }

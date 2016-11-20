@@ -28,6 +28,7 @@
   "dependencies": {
     "csv": "^1.1.0",
     "dateformat": "^1.0.12",
+    "mysql": "^2.12.0",
     "node-xlsx": "^0.7.4"
   }
 }
