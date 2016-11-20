@@ -13,7 +13,7 @@ CREATE TABLE `tbl_StockPrices` (
   `Close` decimal(10,2) not null,
   `Volume` int not null,
   `AdjClose` decimal(10,2) not null,
-  `Date` date not null,
+  `Date` date null,
   `CreateDate` datetime default now(),
   PRIMARY KEY (`SysNo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -34,7 +34,7 @@ export async function getStocks() {
 	return null;
 }
 
-export async function downloadStockListFromYahoo(stockCode, startDate, endDate = new Date()) {
+export async function getStockPricesFromYahoo(stockCode, startDate, endDate = new Date()) {
 	//http://blog.sina.com.cn/s/blog_7ed3ed3d010146ti.html
 	//http://table.finance.yahoo.com/table.csv?s=600000.ss
 	//http://table.finance.yahoo.com/table.csv?s=002673.ss
@@ -50,29 +50,25 @@ export async function downloadStockListFromYahoo(stockCode, startDate, endDate =
 	if (!fs.existsSync(fileName)) {
 		await downloadFileFromUrl(fileName, url);
 	}
-	// let datas = await readCSV(fileName);
-	// if(datas.length>0){
-	// 	datas.shift();
-	// 	return datas;
-	// }
-	// return null;
+	let datas = await readCSV(fileName);
+	return datas;
 }
 
-export async function downloadAll() {
-	let list = await getStocks();
-	if (list) {
-		console.log(`stock total is ${list.length}`);
-		let download = async()=> {
-			if (list.length > 0) {
-				let stock = list.shift();
-				console.log(`stock code : ${stock[0]}`)
-				await downloadStockListFromYahoo(stock[0]);
-				download();
-			}
-		};
-		download();
-	}
-	else{
-		console.log(`stock list is empty`);
-	}
-}
+// export async function downloadAll() {
+// 	let list = await getStocks();
+// 	if (list) {
+// 		console.log(`stock total is ${list.length}`);
+// 		let download = async()=> {
+// 			if (list.length > 0) {
+// 				let stock = list.shift();
+// 				console.log(`stock code : ${stock[0]}`)
+// 				await getStockPricesFromYahoo(stock[0]);
+// 				download();
+// 			}
+// 		};
+// 		download();
+// 	}
+// 	else{
+// 		console.log(`stock list is empty`);
+// 	}
+// }
