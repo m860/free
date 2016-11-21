@@ -73,3 +73,35 @@ export function generateUpdateSqlText(tableName:String,data:Object,condition:Fun
 	return text;
 }
 
+export function toMysqlDateSync(value) {
+	let date;
+	if(typeof value === "string"){
+		date=new Date(value);
+	}
+	else {
+		date=value;
+	}
+	try {
+		return df(date, "yyyy-mm-dd");
+	}
+	catch (ex) {
+		return null;
+	}
+}
+
+export function toMysqlDateTimeSync(value) {
+	let date;
+	if(typeof value === "string"){
+		date=new Date(value);
+	}
+	else {
+		date=value;
+	}
+	try {
+		return df(date, "yyyy-mm-dd HH:MM:ss");
+	}
+	catch (ex) {
+		return null;
+	}
+}
+

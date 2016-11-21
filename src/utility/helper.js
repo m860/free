@@ -21,7 +21,7 @@ export function downloadFileFromUrl(fileName, url, retry = 3) {
 				file.close(()=> {
 					fs.unlink(fileName);
 				});
-				console.log(`save file to ${fileName} occur a error`,err);
+				console.log(`save file to ${fileName} occur a error`, err);
 				reject(err);
 			});
 			res.pipe(file);
@@ -43,7 +43,7 @@ export function downloadFileFromUrl(fileName, url, retry = 3) {
 								requesting();
 							}
 							else {
-								console.log(`downloading file occur a error from ${url}`,res.statusMessage);
+								console.log(`downloading file occur a error from ${url}`, res.statusMessage);
 								reject(res.statusMessage);
 							}
 						}
@@ -61,7 +61,7 @@ export function downloadFileFromUrl(fileName, url, retry = 3) {
 					request = http.get(url, success);
 				}
 				request.on("error", err=> {
-					console.log(`request error`,err);
+					console.log(`request error`, err);
 					if (retry > 1) {
 						retry -= 1;
 						requesting();
@@ -119,7 +119,7 @@ export function readCSV(fileName) {
 	return new Promise((resolve, reject)=> {
 		csv.parse(fs.readFileSync(fileName), (err, data)=> {
 			if (err) {
-				console.error(`read CSV occur error from ${fileName}`,err);
+				console.error(`read CSV occur error from ${fileName}`, err);
 				reject(err);
 			}
 			else {
@@ -148,11 +148,11 @@ export function toMoneySync(value) {
 
 export function toMysqlDateSync(value) {
 	let date;
-	if(typeof value === "string"){
-		date=new Date(value);
+	if (typeof value === "string") {
+		date = new Date(value);
 	}
 	else {
-		date=value;
+		date = value;
 	}
 	try {
 		return df(date, "yyyy-mm-dd");
@@ -164,11 +164,11 @@ export function toMysqlDateSync(value) {
 
 export function toMysqlDateTimeSync(value) {
 	let date;
-	if(typeof value === "string"){
-		date=new Date(value);
+	if (typeof value === "string") {
+		date = new Date(value);
 	}
 	else {
-		date=value;
+		date = value;
 	}
 	try {
 		return df(date, "yyyy-mm-dd HH:MM:ss");
@@ -178,14 +178,49 @@ export function toMysqlDateTimeSync(value) {
 	}
 }
 
-export function addDay(date,day=0){
+export function addDay(date, day = 0) {
 	let ms;
-	if(typeof date === "string"){
-		ms=Date.parse(date);
+	if (typeof date === "string") {
+		ms = Date.parse(date);
 	}
-	else{
-		ms=date.valueOf();
+	else {
+		ms = date.valueOf();
 	}
-	ms+=(day*24*60*60*1000);
+	ms += (day * 24 * 60 * 60 * 1000);
+	return new Date(ms);
+}
+
+export function dateAdd(date: Date|String, expr:Number, type: "second"|"minute"|"hour"|"day"|"month"|"year") {
+	let ms;
+	if (typeof date === "string") {
+		ms = Date.parse(date);
+	}
+	else {
+		ms = date.valueOf();
+	}
+	let unit;
+	switch (type.toLowerCase()) {
+		case "year":
+			unit=365*24*60*60*1000;
+			break;
+		case "month":
+			unit=30*24*60*60*1000;
+			break;
+		case "day":
+			unit=24*60*60*1000;
+			break;
+		case "hour":
+			unit=60*60*1000;
+			break;
+		case "minute":
+			unit=60*1000;
+			break;
+		case "second":
+			unit=1000;
+			break;
+		default:
+			unit = 1;
+	}
+	ms+=(unit*expr);
 	return new Date(ms);
 }
