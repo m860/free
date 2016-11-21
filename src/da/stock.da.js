@@ -48,6 +48,9 @@ export function getLastPriceByCode(companyCode){
 
 export function insertStockPrices(prices){
 	let sql=generateInsertSqlText("tbl_StockPrices",prices);
-	return exec(connection,sql);
+	return exec(connection,sql).catch(ex=>{
+		error(ex);
+		error(JSON.stringify(prices));
+	});
 }
 
