@@ -4,6 +4,7 @@ import {
 	generateInsertSqlText,
 	generateUpdateSqlText
 } from "../utility/dbHelper";
+import {error} from "../utility/logHelper";
 
 let connection=mysql.createConnection({
 	host:"10.211.55.9",

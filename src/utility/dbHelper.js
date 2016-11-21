@@ -4,6 +4,7 @@ export function exec(connecttion,sqlText){
 		connecttion.query(sqlText,(err, rows, fields)=>{
 			//connecttion.end();
 			if(err){
+				console.error(`exec sql occur a error`,err);
 				reject(err);
 			}
 			else{

@@ -4,6 +4,7 @@ import https from "https";
 import xlsx from "node-xlsx";
 import csv from "csv";
 import df from "dateformat";
+import {error} from "./logHelper";
 
 export function downloadFileFromUrl(fileName, url, retry = 3) {
 	let security = /^https/i.test(url);
@@ -14,11 +15,13 @@ export function downloadFileFromUrl(fileName, url, retry = 3) {
 				autoClose: true
 			});
 			file.on("finish", ()=> {
+				console.log(`save file to ${fileName} is success`);
 				resolve(file);
 			}).on("error", err=> {
 				file.close(()=> {
 					fs.unlink(fileName);
 				});
+				console.log(`save file to ${fileName} occur a error`,err);
 				reject(err);
 			});
 			res.pipe(file);
@@ -31,6 +34,7 @@ export function downloadFileFromUrl(fileName, url, retry = 3) {
 				let success = res=> {
 					if (res.statusCode !== 200) {
 						if (res.statusCode === 404) {
+							console.log(`not found file from ${url}`);
 							reject(res.statusMessage);
 						}
 						else {
@@ -39,11 +43,13 @@ export function downloadFileFromUrl(fileName, url, retry = 3) {
 								requesting();
 							}
 							else {
+								console.log(`downloading file occur a error from ${url}`,res.statusMessage);
 								reject(res.statusMessage);
 							}
 						}
 					}
 					else {
+						console.log(`downloading file is success from ${url}`);
 						resolve(res);
 					}
 				}
@@ -55,6 +61,7 @@ export function downloadFileFromUrl(fileName, url, retry = 3) {
 					request = http.get(url, success);
 				}
 				request.on("error", err=> {
+					console.log(`request error`,err);
 					if (retry > 1) {
 						retry -= 1;
 						requesting();
@@ -69,8 +76,6 @@ export function downloadFileFromUrl(fileName, url, retry = 3) {
 	}
 	return getResponse(url, retry).then(res=> {
 		return saveFile(fileName, res);
-	}).catch(ex=> {
-		console.error(ex);
 	})
 }
 
@@ -114,14 +119,13 @@ export function readCSV(fileName) {
 	return new Promise((resolve, reject)=> {
 		csv.parse(fs.readFileSync(fileName), (err, data)=> {
 			if (err) {
+				console.error(`read CSV occur error from ${fileName}`,err);
 				reject(err);
 			}
 			else {
 				resolve(data);
 			}
 		});
-	}).catch(ex=> {
-		console.error(ex);
 	})
 }
 
