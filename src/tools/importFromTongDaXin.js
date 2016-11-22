@@ -29,7 +29,9 @@ export function getAllDataFiles(folder) {
 		});
 		let files = [];
 		walker.on("file", (root, fileStats, next)=> {
-			files.push(path.join(root, fileStats.name));
+			if(/txt$/i.test(fileStats.name)) {
+				files.push(path.join(root, fileStats.name));
+			}
 			next();
 		});
 		walker.on("errors", (root, nodeStatsArray, next)=> {
@@ -52,7 +54,8 @@ function convertRowsToPrices(rows,companyCode){
 			Low: toMoneySync(item[3]),
 			Close: toMoneySync(item[4]),
 			Volume: toIntSync(item[5]),
-			AdjClose: toMoneySync(item[6]),
+			AdjClose: 0,
+			Amount:toMoneySync(item[6])
 		};
 	});
 }
@@ -70,6 +73,7 @@ async function main(){
 	let files=await getAllDataFiles(historyPath);
 	console.log(`find ${files.length} file`);
 	console.log(`begin insert ......`);
+	// files=files.filter(name=>/603819.txt$/.test(name));
 	walkArray(files,fileName=>{
 		console.log(`get records from ${fileName}`);
 		return getRecordsFromText(fileName,line=>{
@@ -79,7 +83,10 @@ async function main(){
 			rows.shift();
 			rows.pop();
 			console.log(`find ${rows.length} records`);
-			return insertStockPrices(convertRowsToPrices(rows),getCompanyCodeFromFileName(fileName));
+			// rows=rows.slice(3320,3330);
+			if(rows.length>0) {
+				return insertStockPrices(convertRowsToPrices(rows, getCompanyCodeFromFileName(fileName)));
+			}
 		})
 	})
 }
