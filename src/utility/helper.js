@@ -190,6 +190,24 @@ export function addDay(date, day = 0) {
 	return new Date(ms);
 }
 
+export function walkArray(arr,stepCallback){
+	let next=async ()=>{
+		if(arr.length>0){
+			let item=arr.shift();
+			try {
+				await stepCallback(item);
+				next();
+			}
+			catch(ex){
+				console.error(ex);
+				next();
+			}
+
+		}
+	}
+	next();
+}
+
 export function dateAdd(date: Date|String, expr:Number, type: "second"|"minute"|"hour"|"day"|"month"|"year") {
 	let ms;
 	if (typeof date === "string") {
